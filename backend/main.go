@@ -6,7 +6,6 @@ import (
 	"backend/middleware"
 	"backend/routes"
 	"backend/services"
-	"backend/utils"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
@@ -42,9 +41,9 @@ func main() {
 	//r.Use(utils.Logger())
 	//r.Use(utils.CORSMiddleware())
 	// 1 request per second with a burst of 5
-	r.Use(utils.RateLimitMiddleware(1, 5))
+	//r.Use(utils.RateLimitMiddleware(1, 5))
 	// error hanlder
-	r.Use(utils.ErrorHandler())
+	//r.Use(utils.ErrorHandler())
 	r.Use(middleware.CORSMiddleware())
 
 	routes.SetupRoutes(r, todoController, authController)
