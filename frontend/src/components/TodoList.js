@@ -11,7 +11,8 @@ const TodoList = () => {
 
     useEffect(() => {
         fetchTodos();
-    }, []);
+        console.log(todos)
+    }, [todos]);
 
     const fetchTodos = async () => {
         try {
@@ -21,9 +22,12 @@ const TodoList = () => {
                 return;
             }
 
-            const response = await axios.get(`${LOCAL_API}/todos`, { withCredentials: true,
-                headers: { 'Authorization': `Bearer ${token}`, 'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json', }
+            const response = await axios.get(`${LOCAL_API}/todos`, { 
+                withCredentials: true,
+                headers: { 'Authorization': `Bearer ${token}`,
+                 'Access-Control-Allow-Origin': '*',
+                  'Content-Type': 'application/json'
+                }
             });
             setTodos(response.data);
         } catch (err) {
@@ -41,8 +45,12 @@ const TodoList = () => {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.post(`${LOCAL_API}/todos`, newTodo, {
-                headers: { 'Authorization': `Bearer ${token}`, 'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json', }
+                headers: { 
+                    'Authorization': `Bearer ${token}`, 
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json'
+                 },
+                 withCredentials: true
             });
             setTodos([...todos, response.data]);
             setNewTodo({ title: '', description: '' });
@@ -56,8 +64,13 @@ const TodoList = () => {
             const token = localStorage.getItem('token');
             await axios.put(`${LOCAL_API}/todos/${todoId}`, 
                 { status: !currentStatus },
-                { headers: { 'Authorization': `Bearer ${token}` },'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json', }
+                { headers: { 
+                    'Authorization': `Bearer ${token}`, 
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json'
+                 },
+                 withCredentials: true,
+                },
             );
             fetchTodos();
         } catch (err) {
@@ -69,8 +82,12 @@ const TodoList = () => {
         try {
             const token = localStorage.getItem('token');
             await axios.delete(`${LOCAL_API}/todos/${todoId}`, {
-                headers: { 'Authorization': `Bearer ${token}`,'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json', }
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json' 
+                },
+                withCredentials: true,
             });
             setTodos(todos.filter(todo => todo.id !== todoId));
         } catch (err) {
@@ -120,7 +137,7 @@ const TodoList = () => {
                         <div className="todo-actions">
                             <input
                                 type="checkbox"
-                                checked={todo.status}
+                                checked={todo.status || false}
                                 onChange={() => handleToggleStatus(todo.id, todo.status)}
                             />
  

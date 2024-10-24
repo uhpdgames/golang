@@ -17,12 +17,12 @@ func SetupRoutes(r *gin.Engine, todoController *controllers.TodoController, auth
 	{
 		api.POST("/register", authController.Register)
 		api.POST("/login", authController.Login)
+		api.GET("/users", authController.GetUsers)
 
 		// Protected routes
 		protected := api.Group("/")
 		protected.Use(middleware.AuthMiddleware())
 		{
-			protected.GET("/users", authController.GetUsers)
 
 			// Todo routes
 			protected.POST("/todos", todoController.CreateTodo)
@@ -40,13 +40,13 @@ func SetupRoutes(r *gin.Engine, todoController *controllers.TodoController, auth
 
 	// Serve static files
 	// Serve static files with middleware
-	r.Use(middleware.ServeStaticOrAPI())
-	r.Static("/static", "./static")
-	r.StaticFile("/favicon.ico", "./static/favicon.ico")
+	// r.Use(middleware.ServeStaticOrAPI())
+	// r.Static("/static", "./static")
+	// r.StaticFile("/favicon.ico", "./static/favicon.ico")
 
-	// Handle React Routes
-	r.NoRoute(func(c *gin.Context) {
-		c.File("./static/index.html")
-	})
+	// // Handle React Routes
+	// r.NoRoute(func(c *gin.Context) {
+	// 	c.File("./static/index.html")
+	// })
 
 }

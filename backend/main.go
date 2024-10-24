@@ -3,16 +3,17 @@ package main
 import (
 	"backend/config"
 	"backend/controllers"
+	"backend/middleware"
 	"backend/routes"
 	"backend/services"
 	"backend/utils"
 	"fmt"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 const FRONT_END_URL string = "http://localhost:3000/"
+const BACK_END_PORT string = ":8080"
 
 func main() {
 
@@ -32,6 +33,7 @@ func main() {
 	r.Use(func(c *gin.Context) {
 		fmt.Printf("Request: %s %s\n", c.Request.Method, c.Request.URL)
 		fmt.Printf("Headers: %v\n", c.Request.Header)
+
 		c.Next()
 	})
 
@@ -43,26 +45,20 @@ func main() {
 	r.Use(utils.RateLimitMiddleware(1, 5))
 	// error hanlder
 	r.Use(utils.ErrorHandler())
-
-	// Setup CORS
-
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000/"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
-		AllowCredentials: true,
-		MaxAge:           12 * 60 * 600,
-	}))
-	// config := cors.DefaultConfig()
-	// config.AllowOrigins = []string{FRONT_END_URL}
-	// config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"}
-	// config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization"}
-	// config.MaxAge = 12 * 60 * 60
-	// r.Use(cors.New(config))
+	r.Use(middleware.CORSMiddleware())
 
 	routes.SetupRoutes(r, todoController, authController)
 
-	//r.LoadHTMLFiles("templates/template1.html", "templates/template2.html")
+	// r.Use(cors.New(cors.Config{
+	// 	AllowOrigins:     []string{FRONT_END_URL},
+	// 	AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
+	// 	AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
+	// 	AllowCredentials: true,
+	// 	AllowOriginFunc: func(origin string) bool {
+	// 		return origin == "http://localhost"
+	// 	},
+	// 	MaxAge: 12 * time.Hour,
+	// }))
 
-	r.Run(":8080")
+	r.Run(BACK_END_PORT)
 }

@@ -22,7 +22,13 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${LOCAL_API}/login`, formData);
+            const response = await axios.post(`${LOCAL_API}/login`, formData, {
+                headers: { 
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json'
+                 },
+                 withCredentials: true
+            });
             
             // token
             localStorage.setItem('token', response.data.token);
@@ -42,11 +48,11 @@ const Login = () => {
             <div>
             <ul className='flex'>
             {allList.map((l) => (
-                <>
-                <li className='py-2 my-4' key={l}>
-                    <Link to={l}>{l}</Link>
+                 
+                <li className='py-2 my-4' key={Math.random()}>
+                    <Link   to={l}>{l}</Link>
                 </li>
-                </>
+               
                 ))}
         </ul>
             <Link to='login' />

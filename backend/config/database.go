@@ -14,7 +14,7 @@ import (
 )
 
 func ConnectDB() *gorm.DB {
-	log.Println("Connected to database successfully")
+	log.Println("database init")
 
 	// Load .env file
 	err := godotenv.Load()
@@ -83,6 +83,7 @@ func ConnectDB() *gorm.DB {
 	}
 
 	log.Println("Database migration completed successfully")
+
 	db = db.Debug()
 
 	return db

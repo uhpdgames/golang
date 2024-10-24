@@ -66,11 +66,11 @@ const UserList = () => {
                 </thead>
                 <tbody>
                     {users && users.map(user => (
-                        <tr key={user.ID}>
-                            <td>{user.ID || 'N/A'}</td>
+                        <tr key={user.id}>
+                            <td>{user.id || 'N/A'}</td>
                             <td>{user.username || 'N/A'}</td>
                             <td>{user.email || 'N/A'}</td>
-                            <td>{formatDate(user.CreatedAt)}</td>
+                            <td>{formatDate(user.created_at)}</td>
                         </tr>
                     ))}
                 </tbody>

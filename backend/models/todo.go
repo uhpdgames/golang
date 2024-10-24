@@ -1,11 +1,8 @@
 package models
 
-import (
-	"gorm.io/gorm"
-)
-
 type Todo struct {
-	gorm.Model
+	//gorm.Model
+	ID          uint   `json:"id" gorm:"primaryKey"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	Status      bool   `json:"status" gorm:"default:false"`
